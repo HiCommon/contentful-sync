@@ -68,9 +68,12 @@ const dataSets = [
     productionContent: productionSchema
   }
 ]
-
-module.exports = () => {
+const diffSpaces = () => {
   return dataSets.map( (set) => {
     return findDifferences(set)
   });
 }
+
+const differences = diffSpaces();
+console.log(differences)
+module.exports = diffSpaces;

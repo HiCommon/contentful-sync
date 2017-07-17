@@ -19,13 +19,16 @@ const productionSpaceOpts = {
   skipRoles: true
 }
 
-
-module.exports = () => {
+const dumpContentful = () => {
   return Promise.resolve();
-  // return spaceExport(stagingSpaceOpts)
-  // .then( (res) => spaceExport(productionSpaceOpts) )
-  // .catch( (err) => {
-  //   console.error('error!');
-  //   console.error(err);
-  // });
+  return spaceExport(stagingSpaceOpts)
+  .then( (res) => spaceExport(productionSpaceOpts) )
+  .catch( (err) => {
+    console.error('error!');
+    console.error(err);
+  });
 }
+
+dumpContentful();
+
+module.exports = dumpContentful;
