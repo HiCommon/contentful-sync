@@ -74,6 +74,4 @@ const diffSpaces = () => {
   });
 }
 
-const differences = diffSpaces();
-console.log(differences)
 module.exports = diffSpaces;

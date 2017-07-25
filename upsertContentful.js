@@ -5,7 +5,8 @@ const upsertAssets = require('./upsertAssets.js');
 const upsertEntries = require('./upsertEntries.js');
 const upsertSchema = require('./upsertSchema.js');
 
-const upsertContentful = (setOfDifferences) => {
+module.exports = (setOfDifferences) => {
+  console.log('beginning upsert!')
   const assets = setOfDifferences.find(set => set.type === 'Assets');
   return upsertAssets(assets.updatedContent, assets.newContent)
   .then( (res) => {
@@ -25,4 +26,3 @@ const upsertContentful = (setOfDifferences) => {
     throw new Error(err);
   });
 }
-upsertContentful();

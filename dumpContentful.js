@@ -28,6 +28,4 @@ const dumpContentful = () => {
   });
 }
 
-dumpContentful();
-
 module.exports = dumpContentful;
