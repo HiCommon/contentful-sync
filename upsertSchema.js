@@ -3,13 +3,16 @@ const client = contentful.createClient({
   accessToken: process.env.MANAGEMENT_TOKEN
 });
 
-module.exports = (updatedContentTypes, newContentTypes) => {
+module.exports = (updatedContentTypes, newContentTypes, removedContentTypes) => {
   const promises = [];
   if (updatedContentTypes.length) {
     promises.push(updateContentTypes(updatedContentTypes));
   }
   if (newContentTypes.length) {
     promises.push(createContentTypes(newContentTypes));
+  }
+  if (removedContentTypes.length) {
+    promises.push(removeContentTypes(removedContentTypes));
   }
   const flattenedPromises = [].concat.apply([], promises);
   return Promise.all(flattenedPromises)
@@ -68,4 +71,30 @@ const updateContentTypes = (updatedContentTypes) => {
     console.error('Something bad happened');
     console.error(err);
   })
+}
+
+const removeContentTypes = (removedContentTypes) => {
+  return client.getSpace(process.env.TARGET_SPACE_ID)
+  .then( (space) => {
+    return removedContentTypes.map( (contentType) => {
+      return space.getEntry(contentType.sys.id)
+      .then( (foundContentType) => {
+        return foundContentType.unpublish();
+      })
+      .then( (unpublishedContentType) => {
+        return unpublishedContentType.delete();
+      })
+      .catch( (err) => {
+        console.error('Error deleting contentType!');
+        console.log(contentType);
+        console.error(err);
+        throw new Error(err);
+      });
+    });
+  })
+  .catch( (err) => {
+    console.error('Error!')
+    console.error(err);
+    throw new Error(err);
+  });
 }
