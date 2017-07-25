@@ -18,7 +18,8 @@ module.exports = (updatedAssets, newAssets) => {
 const createAssets = (newAssets) => {
   return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
-    return newAssets.map( (asset) => {
+    const filteredNewAssets = newAssets.filter( asset => !!Object.keys(asset.fields).length && !!asset.fields.file && !!(asset.fields.file && asset.fields.file['en-US'].url))
+    return filteredNewAssets.map( (asset) => {
       return space.createAssetWithId(asset.sys.id, asset)
       .then( (createdAsset) => {
         return createdAsset.publish();
@@ -35,7 +36,8 @@ const createAssets = (newAssets) => {
 const updateAssets = (updatedAssets) => {
   return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
-    return updatedAssets.map( (asset) => {
+    const filteredUpdatedAssets = updatedAssets.filter( asset => !!Object.keys(asset.fields).length && !!asset.fields.file && !!(asset.fields.file && asset.fields.file['en-US'].url))
+    return filteredUpdatedAssets.map( (asset) => {
       return space.getAsset(asset.sys.id)
       .then( (foundAsset) => {
         delete asset.sys
