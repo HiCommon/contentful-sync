@@ -3,13 +3,16 @@ const client = contentful.createClient({
   accessToken: process.env.MANAGEMENT_TOKEN
 });
 
-module.exports = (updatedAssets, newAssets) => {
+module.exports = (updatedAssets, newAssets, removedAssets) => {
   const promises = [];
   if (updatedAssets.length) {
     promises.push(updateAssets(updatedAssets));
   }
   if (newAssets.length) {
     promises.push(createAssets(newAssets));
+  }
+  if (removedAssets.length) {
+    promises.push(removeAssets(removedAssets));
   }
   const flattenedPromises = [].concat.apply([], promises);
   return Promise.all(flattenedPromises);
@@ -64,4 +67,27 @@ const updateAssets = (updatedAssets) => {
     console.error(err);
     throw new Error(err);
   })
+}
+
+const removeAssets = (removedAssets) => {
+  return client.getSpace(process.env.TARGET_SPACE_ID)
+  .then( (space) => {
+    return removedAssets.map( (asset) => {
+      return space.getAsset(asset.sys.id)
+      .then( (foundAsset) => {
+        return foundAsset.delete();
+      })
+      .catch( (err) => {
+        console.error('Error deleting asset!');
+        console.log(asset);
+        console.error(err);
+        throw new Error(err);
+      });
+    });
+  })
+  .catch( (err) => {
+    console.error('Error!')
+    console.error(err);
+    throw new Error(err);
+  });
 }
