@@ -3,13 +3,16 @@ const client = contentful.createClient({
   accessToken: process.env.MANAGEMENT_TOKEN
 });
 
-module.exports = (updatedEntries, newEntries) => {
+module.exports = (updatedEntries, newEntries, removedEntries) => {
   const promises = [];
   if (updatedEntries.length) {
     promises.push(updateEntries(updatedEntries));
   }
   if (newEntries.length) {
     promises.push(createEntries(newEntries));
+  }
+  if (removedEntries.length) {
+    promises.push(removeEntries(removedEntries));
   }
   const flattenedPromises = [].concat.apply([], promises);
   return Promise.all(flattenedPromises)
@@ -67,5 +70,28 @@ const updateEntries = (updatedEntries) => {
   .catch( (err) => {
     console.error('Something bad happened');
     console.error(err);
+  });
+}
+
+const removeEntries = (removedEntries) => {
+  return client.getSpace(process.env.TARGET_SPACE_ID)
+  .then( (space) => {
+    return removedEntries.map( (entry) => {
+      return space.getEntry(entry.sys.id)
+      .then( (foundEntry) => {
+        return foundEntry.delete();
+      })
+      .catch( (err) => {
+        console.error('Error deleting entry!');
+        console.log(entry);
+        console.error(err);
+        throw new Error(err);
+      });
+    });
+  })
+  .catch( (err) => {
+    console.error('Error!')
+    console.error(err);
+    throw new Error(err);
   });
 }
