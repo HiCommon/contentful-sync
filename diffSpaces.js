@@ -30,6 +30,7 @@ const stagingAssets = stagingData.assets;
 const findDifferences = ({stagingContent, productionContent, type}) => {
   const updatedContent = [];
   const newContent = [];
+  const removedContent = [];
   stagingContent.forEach( (stagingDatum) => {
     const matchingProductionDatum = productionContent.find( (productionDatum) => {
       return stagingDatum.sys.id === productionDatum.sys.id
@@ -44,10 +45,19 @@ const findDifferences = ({stagingContent, productionContent, type}) => {
       newContent.push(stagingDatum)
     }
   });
+  productionContent.forEach( (productionDatum) => {
+    const matchingStagingDatum = stagingContent.find( (stagingDatum) => {
+      return productionDatum.sys.id === stagingDatum.sys.id;
+    });
+    if (!matchingStagingDatum) {
+      removedContent.push(productionDatum)
+    }
+  })
   return {
     type,
     updatedContent,
-    newContent
+    newContent,
+    removedContent
   }
 }
 
