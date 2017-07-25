@@ -79,7 +79,10 @@ const removeEntries = (removedEntries) => {
     return removedEntries.map( (entry) => {
       return space.getEntry(entry.sys.id)
       .then( (foundEntry) => {
-        return foundEntry.delete();
+        return foundEntry.unpublish();
+      })
+      .then( (unpublishedEntry) => {
+        return unpublishedEntry.delete();
       })
       .catch( (err) => {
         console.error('Error deleting entry!');

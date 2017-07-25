@@ -75,7 +75,10 @@ const removeAssets = (removedAssets) => {
     return removedAssets.map( (asset) => {
       return space.getAsset(asset.sys.id)
       .then( (foundAsset) => {
-        return foundAsset.delete();
+        return foundAsset.unpublish();
+      })
+      .then( (unpublishedAsset) => {
+        return unpublishedAsset.delete();
       })
       .catch( (err) => {
         console.error('Error deleting asset!');
