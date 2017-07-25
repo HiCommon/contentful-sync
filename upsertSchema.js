@@ -16,7 +16,7 @@ module.exports = (updatedContentTypes, newContentTypes) => {
 }
 
 const createContentTypes = (newContentTypes) => {
-  return client.getSpace(process.env.PRODUCTION_SPACE_ID)
+  return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
     return newContentTypes.map( (contentType) => {
       return space.createContentTypeWithId(contentType.sys.id, contentType)
@@ -38,7 +38,7 @@ const createContentTypes = (newContentTypes) => {
 }
 
 const updateContentTypes = (updatedContentTypes) => {
-  return client.getSpace(process.env.PRODUCTION_SPACE_ID)
+  return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
     return updatedContentTypes.map( (contentType) => {
       return space.getContentType(contentType.sys.id)

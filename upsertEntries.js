@@ -16,7 +16,7 @@ module.exports = (updatedEntries, newEntries) => {
 }
 
 const createEntries = (newEntries) => {
-  return client.getSpace(process.env.PRODUCTION_SPACE_ID)
+  return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
     return newEntries.map( (entry) => {
       // console.log(entry.sys.id, entry.sys.contentType.sys.id)
@@ -39,7 +39,7 @@ const createEntries = (newEntries) => {
 }
 
 const updateEntries = (updatedEntries) => {
-  return client.getSpace(process.env.PRODUCTION_SPACE_ID)
+  return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
     return updatedEntries.map( (entry) => {
       return space.getEntry(entry.sys.id)

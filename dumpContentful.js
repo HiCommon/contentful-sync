@@ -1,6 +1,6 @@
 require('dotenv').config();
-const stagingSpaceId = process.env.STAGING_SPACE_ID;
-const productionSpaceId = process.env.PRODUCTION_SPACE_ID;
+const stagingSpaceId = process.env.ORIGIN_SPACE_ID;
+const productionSpaceId = process.env.TARGET_SPACE_ID;
 const managementToken = process.env.MANAGEMENT_TOKEN;
 
 const spaceExport = require('contentful-export');

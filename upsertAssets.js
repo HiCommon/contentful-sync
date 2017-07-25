@@ -16,7 +16,7 @@ module.exports = (updatedAssets, newAssets) => {
 }
 
 const createAssets = (newAssets) => {
-  return client.getSpace(process.env.PRODUCTION_SPACE_ID)
+  return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
     return newAssets.map( (asset) => {
       return space.createAssetWithId(asset.sys.id, asset)
@@ -33,7 +33,7 @@ const createAssets = (newAssets) => {
 }
 
 const updateAssets = (updatedAssets) => {
-  return client.getSpace(process.env.PRODUCTION_SPACE_ID)
+  return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
     return updatedAssets.map( (asset) => {
       return space.getAsset(asset.sys.id)
