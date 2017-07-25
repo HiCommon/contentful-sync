@@ -16,16 +16,18 @@ module.exports = (updatedEntries, newEntries) => {
 }
 
 const createEntries = (newEntries) => {
+  console.log('Creating new entries...');
+  console.log(newEntries);
   return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
     return newEntries.map( (entry) => {
-      // console.log(entry.sys.id, entry.sys.contentType.sys.id)
       return space.createEntryWithId(entry.sys.contentType.sys.id, entry.sys.id, entry)
       .then( (createdEntry) => {
         return createdEntry.publish();
       })
       .catch( (err) => {
         console.error('Issue creating entry!');
+        console.log(entry)
         console.error(err);
         throw new Error(err);
       });
@@ -39,6 +41,8 @@ const createEntries = (newEntries) => {
 }
 
 const updateEntries = (updatedEntries) => {
+  console.log('Updating entries...');
+  console.log(updatedEntries);
   return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
     return updatedEntries.map( (entry) => {
@@ -54,6 +58,7 @@ const updateEntries = (updatedEntries) => {
       })
       .catch( (err) => {
         console.error('Issue updating entry');
+        console.log(entry)
         console.error(err);
         throw new Error(err);
       });

@@ -69,6 +69,7 @@ const dataSets = [
   }
 ]
 const diffSpaces = () => {
+  console.log('Beginning diffing of Contentful spaces');
   return dataSets.map( (set) => {
     return findDifferences(set)
   });

@@ -18,6 +18,8 @@ module.exports = (updatedContentTypes, newContentTypes) => {
 const createContentTypes = (newContentTypes) => {
   return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
+    console.log('Creating new Content Types...');
+    console.log(newContentTypes);
     return newContentTypes.map( (contentType) => {
       return space.createContentTypeWithId(contentType.sys.id, contentType)
       .then( (createdContentType) => {
@@ -25,6 +27,7 @@ const createContentTypes = (newContentTypes) => {
       })
       .catch( (err) => {
         console.error('Issue creating content type!');
+        console.log(contentType);
         console.error(err);
         throw new Error(err);
       });
@@ -40,6 +43,8 @@ const createContentTypes = (newContentTypes) => {
 const updateContentTypes = (updatedContentTypes) => {
   return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
+    console.log('Updating Content Types...');
+    console.log(updatedContentTypes)
     return updatedContentTypes.map( (contentType) => {
       return space.getContentType(contentType.sys.id)
       .then( (foundContentType) => {
@@ -53,6 +58,7 @@ const updateContentTypes = (updatedContentTypes) => {
       })
       .catch( (err) => {
         console.error('Issue updating content type');
+        console.log(contentType)
         console.error(err);
         throw new Error(err);
       });

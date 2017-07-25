@@ -1,12 +1,11 @@
 require('dotenv').config();
-const dumpAndDiff = require('./index.js');
 
 const upsertAssets = require('./upsertAssets.js');
 const upsertEntries = require('./upsertEntries.js');
 const upsertSchema = require('./upsertSchema.js');
 
 module.exports = (setOfDifferences) => {
-  console.log('beginning upsert!')
+  console.log('Beginning upsert to Contentful...');
   const assets = setOfDifferences.find(set => set.type === 'Assets');
   return upsertAssets(assets.updatedContent, assets.newContent)
   .then( (res) => {
@@ -18,8 +17,7 @@ module.exports = (setOfDifferences) => {
     return upsertEntries(entries.updatedContent, entries.newContent)
   })
   .then( (res) => {
-    console.log('didnt fail?')
-    console.log(res)
+    console.log('Finished upsert!');
   })
   .catch( (err) => {
     console.error('Error');

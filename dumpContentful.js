@@ -20,6 +20,7 @@ const productionSpaceOpts = {
 }
 
 const dumpContentful = () => {
+  console.log('Beginning dump of Contentful...')
   return spaceExport(stagingSpaceOpts)
   .then( (res) => spaceExport(productionSpaceOpts) )
   .catch( (err) => {

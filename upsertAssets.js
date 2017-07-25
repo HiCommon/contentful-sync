@@ -19,6 +19,8 @@ const createAssets = (newAssets) => {
   return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
     const filteredNewAssets = newAssets.filter( asset => !!Object.keys(asset.fields).length && !!asset.fields.file && !!(asset.fields.file && asset.fields.file['en-US'].url))
+    console.log('Creating assets...');
+    console.log(filteredNewAssets);
     return filteredNewAssets.map( (asset) => {
       return space.createAssetWithId(asset.sys.id, asset)
       .then( (createdAsset) => {
@@ -26,6 +28,7 @@ const createAssets = (newAssets) => {
       })
       .catch( err => {
         console.error('Issue creating asset!')
+        console.log(asset)
         console.error(err);
         throw new Error(err)
       })
@@ -37,6 +40,8 @@ const updateAssets = (updatedAssets) => {
   return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
     const filteredUpdatedAssets = updatedAssets.filter( asset => !!Object.keys(asset.fields).length && !!asset.fields.file && !!(asset.fields.file && asset.fields.file['en-US'].url))
+    console.log('Updating assets...');
+    console.log(filteredUpdatedAssets);
     return filteredUpdatedAssets.map( (asset) => {
       return space.getAsset(asset.sys.id)
       .then( (foundAsset) => {
@@ -49,6 +54,7 @@ const updateAssets = (updatedAssets) => {
       })
       .catch( (err) => {
         console.error('Issue updating asset!');
+        console.log(asset)
         console.error(err);
         throw new Error(err);
       })
