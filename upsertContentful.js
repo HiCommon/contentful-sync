@@ -5,14 +5,9 @@ const upsertAssets = require('./upsertAssets.js');
 const upsertEntries = require('./upsertEntries.js');
 const upsertSchema = require('./upsertSchema.js');
 
-const upsertContentful = () => {
-  let setOfDifferences;
-  return dumpAndDiff()
-  .then( (sets) => {
-    setOfDifferences = sets;
-    const assets = setOfDifferences.find(set => set.type === 'Assets');
-    return upsertAssets(assets.updatedContent, assets.newContent)
-  })
+const upsertContentful = (setOfDifferences) => {
+  const assets = setOfDifferences.find(set => set.type === 'Assets');
+  return upsertAssets(assets.updatedContent, assets.newContent)
   .then( (res) => {
     const schema = setOfDifferences.find(set => set.type === 'Schema');
     return upsertSchema(schema.updatedContent, schema.newContent)

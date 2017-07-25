@@ -20,7 +20,6 @@ const productionSpaceOpts = {
 }
 
 const dumpContentful = () => {
-  return Promise.resolve();
   return spaceExport(stagingSpaceOpts)
   .then( (res) => spaceExport(productionSpaceOpts) )
   .catch( (err) => {
