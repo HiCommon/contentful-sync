@@ -4,27 +4,23 @@ const client = contentful.createClient({
 });
 
 module.exports = (updatedAssets, newAssets, removedAssets) => {
-  const promises = [];
-  if (updatedAssets.length) {
-    promises.push(updateAssets(updatedAssets));
-  }
-  if (newAssets.length) {
-    promises.push(createAssets(newAssets));
-  }
-  if (removedAssets.length) {
-    promises.push(removeAssets(removedAssets));
-  }
-  const flattenedPromises = [].concat.apply([], promises);
-  return Promise.all(flattenedPromises);
+  return updateAssets(updatedAssets)
+  .then(() => createAssets(newAssets))
+  .then(() => removeAssets(removedAssets))
+  .catch((err) => console.error(err));
 }
 
 const createAssets = (newAssets) => {
+  if (!newAssets.length) {
+    console.log('No assets to create. Moving along...')
+    return Promise.resolve();
+  }
   return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
     const filteredNewAssets = newAssets.filter( asset => !!Object.keys(asset.fields).length && !!asset.fields.file && !!(asset.fields.file && asset.fields.file['en-US'].url))
     console.log('Creating assets...');
     console.log(filteredNewAssets);
-    return filteredNewAssets.map( (asset) => {
+    return Promise.all(filteredNewAssets.map( (asset) => {
       return space.createAssetWithId(asset.sys.id, asset)
       .then( (createdAsset) => {
         return createdAsset.publish();
@@ -35,17 +31,21 @@ const createAssets = (newAssets) => {
         console.error(err);
         throw new Error(err)
       })
-    })
+    }));
   })
 }
 
 const updateAssets = (updatedAssets) => {
+  if (!updatedAssets.length) {
+    console.log('No assets to update. Moving along...')
+    return Promise.resolve();
+  }
   return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
     const filteredUpdatedAssets = updatedAssets.filter( asset => !!Object.keys(asset.fields).length && !!asset.fields.file && !!(asset.fields.file && asset.fields.file['en-US'].url))
     console.log('Updating assets...');
     console.log(filteredUpdatedAssets);
-    return filteredUpdatedAssets.map( (asset) => {
+    return Promise.all(filteredUpdatedAssets.map( (asset) => {
       return space.getAsset(asset.sys.id)
       .then( (foundAsset) => {
         delete asset.sys
@@ -61,7 +61,7 @@ const updateAssets = (updatedAssets) => {
         console.error(err);
         throw new Error(err);
       })
-    })
+    }));
   })
   .catch( (err) => {
     console.error(err);
@@ -70,9 +70,13 @@ const updateAssets = (updatedAssets) => {
 }
 
 const removeAssets = (removedAssets) => {
+  if (!removedAssets.length) {
+    console.log('No assets to remove. Moving along...')
+    return Promise.resolve();
+  }
   return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
-    return removedAssets.map( (asset) => {
+    return Promise.all(removedAssets.map( (asset) => {
       return space.getAsset(asset.sys.id)
       .then( (foundAsset) => {
         return foundAsset.unpublish();
@@ -86,7 +90,7 @@ const removeAssets = (removedAssets) => {
         console.error(err);
         throw new Error(err);
       });
-    });
+    }));
   })
   .catch( (err) => {
     console.error('Error!')

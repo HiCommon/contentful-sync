@@ -4,26 +4,24 @@ const client = contentful.createClient({
 });
 
 module.exports = (updatedContentTypes, newContentTypes, removedContentTypes) => {
-  const promises = [];
-  if (updatedContentTypes.length) {
-    promises.push(updateContentTypes(updatedContentTypes));
-  }
-  if (newContentTypes.length) {
-    promises.push(createContentTypes(newContentTypes));
-  }
-  if (removedContentTypes.length) {
-    promises.push(removeContentTypes(removedContentTypes));
-  }
-  const flattenedPromises = [].concat.apply([], promises);
-  return Promise.all(flattenedPromises)
+  return updateContentTypes(updatedContentTypes)
+  .then(() => createContentTypes(newContentTypes))
+  .then(() => removeContentTypes(removedContentTypes))
+  .catch((err) => {
+    console.error(err);
+  });
 }
 
 const createContentTypes = (newContentTypes) => {
+  if (!newContentTypes.length) {
+    console.log('No Content Types to create. Moving along...')
+    return Promise.resolve();
+  }
   return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
     console.log('Creating new Content Types...');
     console.log(newContentTypes);
-    return newContentTypes.map( (contentType) => {
+    return Promise.all(newContentTypes.map( (contentType) => {
       return space.createContentTypeWithId(contentType.sys.id, contentType)
       .then( (createdContentType) => {
         return createdContentType.publish();
@@ -34,7 +32,7 @@ const createContentTypes = (newContentTypes) => {
         console.error(err);
         throw new Error(err);
       });
-    });
+    }));
   })
   .catch( (err) => {
     console.log('Something went wrong...');
@@ -44,11 +42,15 @@ const createContentTypes = (newContentTypes) => {
 }
 
 const updateContentTypes = (updatedContentTypes) => {
+  if (!updatedContentTypes.length) {
+    console.log('No Content Types to update. Moving along...')
+    return Promise.resolve();
+  }
   return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
     console.log('Updating Content Types...');
     console.log(updatedContentTypes)
-    return updatedContentTypes.map( (contentType) => {
+    return Promise.all(updatedContentTypes.map( (contentType) => {
       return space.getContentType(contentType.sys.id)
       .then( (foundContentType) => {
         // merge found content type and exist content type and save
@@ -65,7 +67,7 @@ const updateContentTypes = (updatedContentTypes) => {
         console.error(err);
         throw new Error(err);
       });
-    });
+    }));
   })
   .catch( (err) => {
     console.error('Something bad happened');
@@ -74,9 +76,13 @@ const updateContentTypes = (updatedContentTypes) => {
 }
 
 const removeContentTypes = (removedContentTypes) => {
+  if (!removedContentTypes.length) {
+    console.log('No Content Types to removed. Moving along...')
+    return Promise.resolve();
+  }
   return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
-    return removedContentTypes.map( (contentType) => {
+    return Promise.all(removedContentTypes.map( (contentType) => {
       return space.getEntry(contentType.sys.id)
       .then( (foundContentType) => {
         return foundContentType.unpublish();
@@ -90,7 +96,7 @@ const removeContentTypes = (removedContentTypes) => {
         console.error(err);
         throw new Error(err);
       });
-    });
+    }));
   })
   .catch( (err) => {
     console.error('Error!')

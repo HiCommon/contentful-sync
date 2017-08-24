@@ -4,26 +4,22 @@ const client = contentful.createClient({
 });
 
 module.exports = (updatedEntries, newEntries, removedEntries) => {
-  const promises = [];
-  if (updatedEntries.length) {
-    promises.push(updateEntries(updatedEntries));
-  }
-  if (newEntries.length) {
-    promises.push(createEntries(newEntries));
-  }
-  if (removedEntries.length) {
-    promises.push(removeEntries(removedEntries));
-  }
-  const flattenedPromises = [].concat.apply([], promises);
-  return Promise.all(flattenedPromises)
+  return updateEntries(updatedEntries)
+  .then(() => createEntries(newEntries))
+  .then(() => removeEntries(removedEntries))
+  .catch((err) => console.error(err))
 }
 
 const createEntries = (newEntries) => {
+  if (!newEntries.length) {
+    console.log('No entries to create. Moving along...')
+    return Promise.resolve();
+  }
   console.log('Creating new entries...');
   console.log(newEntries);
   return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
-    return newEntries.map( (entry) => {
+    return Promise.all(newEntries.map( (entry) => {
       return space.createEntryWithId(entry.sys.contentType.sys.id, entry.sys.id, entry)
       .then( (createdEntry) => {
         return createdEntry.publish();
@@ -34,7 +30,7 @@ const createEntries = (newEntries) => {
         console.error(err);
         throw new Error(err);
       });
-    });
+    }));
   })
   .catch( (err) => {
     console.log('Something went wrong...');
@@ -44,11 +40,15 @@ const createEntries = (newEntries) => {
 }
 
 const updateEntries = (updatedEntries) => {
+  if (!updatedEntries.length) {
+    console.log('No entries to update. Moving along...')
+    return Promise.resolve();
+  }
   console.log('Updating entries...');
   console.log(updatedEntries);
   return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
-    return updatedEntries.map( (entry) => {
+    return Promise.all(updatedEntries.map( (entry) => {
       return space.getEntry(entry.sys.id)
       .then( (foundEntry) => {
         // merge found entry and exist entry and save
@@ -65,7 +65,7 @@ const updateEntries = (updatedEntries) => {
         console.error(err);
         throw new Error(err);
       });
-    });
+    }));
   })
   .catch( (err) => {
     console.error('Something bad happened');
@@ -74,9 +74,13 @@ const updateEntries = (updatedEntries) => {
 }
 
 const removeEntries = (removedEntries) => {
+  if (!removedEntries.length) {
+    console.log('No entries to remove. Moving along...')
+    return Promise.resolve();
+  }
   return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
-    return removedEntries.map( (entry) => {
+    return Promise.all(removedEntries.map( (entry) => {
       return space.getEntry(entry.sys.id)
       .then( (foundEntry) => {
         return foundEntry.unpublish();
@@ -90,7 +94,7 @@ const removeEntries = (removedEntries) => {
         console.error(err);
         throw new Error(err);
       });
-    });
+    }));
   })
   .catch( (err) => {
     console.error('Error!')
