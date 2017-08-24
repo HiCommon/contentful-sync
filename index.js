@@ -1,11 +1,10 @@
-const dumpDiffAndUpsert = () => {
-  return require('./dumpContentful.js')()
-  .then( () => require('./diffSpaces.js')() )
-  .then( (sets) => require('./upsertContentful.js')(sets) )
-  .catch( (err) => {
-    console.error('Error!')
-    console.error(err);
-  })
-}
+const dumpContentful = require('./dumpContentful.js');
+const diffSpaces = require('./diffSpaces.js');
+const upsertContentful = require('./upsertContentful.js');
 
-dumpDiffAndUpsert();
+dumpContentful()
+.then(upsertContentful(diffSpaces()))
+.catch(err => {
+  console.error('Error!');
+  console.error(err);
+});
