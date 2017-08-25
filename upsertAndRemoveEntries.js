@@ -16,7 +16,6 @@ const createEntries = (newEntries) => {
     return Promise.resolve();
   }
   console.log('Creating new entries...');
-  console.log(newEntries);
   return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
     return Promise.all(newEntries.map( (entry) => {
@@ -45,7 +44,6 @@ const updateEntries = (updatedEntries) => {
     return Promise.resolve();
   }
   console.log('Updating entries...');
-  console.log(updatedEntries);
   return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
     return Promise.all(updatedEntries.map( (entry) => {
@@ -78,6 +76,7 @@ const removeEntries = (removedEntries) => {
     console.log('No entries to remove. Moving along...')
     return Promise.resolve();
   }
+  console.log('Removing entries...')
   return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
     return Promise.all(removedEntries.map( (entry) => {

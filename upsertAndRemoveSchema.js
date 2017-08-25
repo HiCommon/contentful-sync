@@ -17,10 +17,9 @@ const createContentTypes = (newContentTypes) => {
     console.log('No Content Types to create. Moving along...')
     return Promise.resolve();
   }
+  console.log('Creating new Content Types...');
   return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
-    console.log('Creating new Content Types...');
-    console.log(newContentTypes);
     return Promise.all(newContentTypes.map( (contentType) => {
       return space.createContentTypeWithId(contentType.sys.id, contentType)
       .then( (createdContentType) => {
@@ -46,10 +45,9 @@ const updateContentTypes = (updatedContentTypes) => {
     console.log('No Content Types to update. Moving along...')
     return Promise.resolve();
   }
+  console.log('Updating Content Types...');
   return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
-    console.log('Updating Content Types...');
-    console.log(updatedContentTypes)
     return Promise.all(updatedContentTypes.map( (contentType) => {
       return space.getContentType(contentType.sys.id)
       .then( (foundContentType) => {
@@ -80,6 +78,7 @@ const removeContentTypes = (removedContentTypes) => {
     console.log('No Content Types to removed. Moving along...')
     return Promise.resolve();
   }
+  console.log('Removing Content Types...');
   return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
     return Promise.all(removedContentTypes.map( (contentType) => {

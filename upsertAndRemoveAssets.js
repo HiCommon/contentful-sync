@@ -15,11 +15,10 @@ const createAssets = (newAssets) => {
     console.log('No assets to create. Moving along...')
     return Promise.resolve();
   }
+  console.log('Creating assets...');
   return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
     const filteredNewAssets = newAssets.filter( asset => !!Object.keys(asset.fields).length && !!asset.fields.file && !!(asset.fields.file && asset.fields.file['en-US'].url))
-    console.log('Creating assets...');
-    console.log(filteredNewAssets);
     return Promise.all(filteredNewAssets.map( (asset) => {
       return space.createAssetWithId(asset.sys.id, asset)
       .then( (createdAsset) => {
@@ -40,11 +39,10 @@ const updateAssets = (updatedAssets) => {
     console.log('No assets to update. Moving along...')
     return Promise.resolve();
   }
+  console.log('Updating assets...');
   return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
     const filteredUpdatedAssets = updatedAssets.filter( asset => !!Object.keys(asset.fields).length && !!asset.fields.file && !!(asset.fields.file && asset.fields.file['en-US'].url))
-    console.log('Updating assets...');
-    console.log(filteredUpdatedAssets);
     return Promise.all(filteredUpdatedAssets.map( (asset) => {
       return space.getAsset(asset.sys.id)
       .then( (foundAsset) => {
@@ -74,6 +72,7 @@ const removeAssets = (removedAssets) => {
     console.log('No assets to remove. Moving along...')
     return Promise.resolve();
   }
+  console.log('Removing assets...');  
   return client.getSpace(process.env.TARGET_SPACE_ID)
   .then( (space) => {
     return Promise.all(removedAssets.map( (asset) => {
