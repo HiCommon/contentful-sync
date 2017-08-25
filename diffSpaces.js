@@ -1,8 +1,3 @@
-require('dotenv').config();
-const stagingSpaceId = process.env.ORIGIN_SPACE_ID;
-const productionSpaceId = process.env.TARGET_SPACE_ID;
-
-const fs = require('fs');
 const moment = require('moment');
 
 const findDifferences = ({stagingContent, productionContent, type}) => {
