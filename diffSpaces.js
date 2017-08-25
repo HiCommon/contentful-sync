@@ -4,6 +4,8 @@ const findDifferences = ({stagingContent, productionContent, type}) => {
   const updatedContent = [];
   const newContent = [];
   const removedContent = [];
+  // For each piece of staging content, update the matching piece of production content
+  // if the publish of the staging content is later than the matching production content
   stagingContent.forEach( (stagingDatum) => {
     const matchingProductionDatum = productionContent.find( (productionDatum) => {
       return stagingDatum.sys.id === productionDatum.sys.id
@@ -36,11 +38,11 @@ const findDifferences = ({stagingContent, productionContent, type}) => {
 
 const formatData = function (contentfulData) {
   const { stagingData, productionData } = contentfulData;
-  const productionSchema = productionData.contentTypes;
+  const productionContentTypes = productionData.contentTypes;
   const productionEntries = productionData.entries;
   const productionAssets = productionData.assets;
 
-  const stagingSchema = stagingData.contentTypes;
+  const stagingContentTypes = stagingData.contentTypes;
   const stagingEntries = stagingData.entries;
   const stagingAssets = stagingData.assets;
   return [
@@ -55,9 +57,9 @@ const formatData = function (contentfulData) {
       productionContent: productionAssets
     },
     {
-      type: 'Schema',
-      stagingContent: stagingSchema,
-      productionContent: productionSchema
+      type: 'ContentTypes',
+      stagingContent: stagingContentTypes,
+      productionContent: productionContentTypes
     }
   ]
 }
