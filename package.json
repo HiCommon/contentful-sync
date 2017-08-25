@@ -17,5 +17,8 @@
     "contentful-management": "^3.9.1",
     "dotenv": "^4.0.0",
     "moment": "^2.18.1"
+  },
+  "engines": {
+    "node": ">=7.0.0"
   }
 }
