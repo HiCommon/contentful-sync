@@ -10,8 +10,6 @@
   "author": "Leon Daniel Thorne <ldthorne@brandeis.edu>",
   "license": "ISC",
   "dependencies": {
-    "contentful": "^4.5.0",
-    "contentful-batch-libs": "^5.10.0",
     "contentful-export": "^4.7.5",
     "contentful-management": "^3.9.1",
     "dotenv": "^4.0.0",
