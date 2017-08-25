@@ -1,17 +1,18 @@
 {
   "name": "contentful-diffing",
   "version": "1.0.0",
-  "description": "",
-  "main": "diffSpaces.js",
+  "description": "A library for in-memory diffing and syncing of two Contentful Spaces",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
   },
-  "author": "Leon Daniel Thorne <ldthorne@brandeis.edu>",
-  "license": "ISC",
+  "author": "Daniel Thorne <ldthorne96@gmail.com> (https://www.github.com/ldthorne)",
+  "contributors": [
+    "Matt Steedman (https://www.github.com/knubie)"
+  ],
+  "license": "MIT",
   "dependencies": {
-    "contentful": "^4.5.0",
-    "contentful-batch-libs": "^5.10.0",
     "contentful-export": "^4.7.5",
     "contentful-management": "^3.9.1",
     "dotenv": "^4.0.0",

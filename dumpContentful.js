@@ -9,20 +9,30 @@ const stagingSpaceOpts = {
   spaceId: stagingSpaceId,
   managementToken: managementToken,
   maxAllowedItems: 10000,
-  skipRoles: true
+  skipRoles: true,
+  saveFile: false
 }
 
 const productionSpaceOpts = {
   spaceId: productionSpaceId,
   managementToken: managementToken,
   maxAllowedItems: 10000,
-  skipRoles: true
+  skipRoles: true,
+  saveFile: false
 }
 
 const dumpContentful = () => {
   console.log('Beginning dump of Contentful...')
+  const data = {};
   return spaceExport(stagingSpaceOpts)
-  .then( (res) => spaceExport(productionSpaceOpts) )
+  .then( (stagingData) => {
+    data.stagingData = stagingData;
+    return spaceExport(productionSpaceOpts)
+  })
+  .then((productionData) => {
+    data.productionData = productionData;
+    return data;
+  })
   .catch( (err) => {
     console.error('error!');
     console.error(err);
