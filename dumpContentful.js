@@ -1,41 +1,48 @@
 const spaceExport = require('contentful-export');
 
-const stagingSpaceOpts = ({ originSpaceId, managementToken }) => {
-  return {
-    spaceId: originSpaceId,
-    managementToken,
-    maxAllowedItems: 10000,
-    skipRoles: true,
-    saveFile: false
-  };
-};
+class DumpContentful {
+  constructor(config) {
+    this.config = config;
+    this.setStagingSpaceOpts();
+    this.setProductionSpaceOpts();
+  }
+  setStagingSpaceOpts () {
+    const { originSpaceId, managementToken } = this.config;
+    this.stagingSpaceOpts = {
+      spaceId: originSpaceId,
+      managementToken,
+      maxAllowedItems: 10000,
+      skipRoles: true,
+      saveFile: false
+    };
+  }
+  setProductionSpaceOpts () {
+    const { targetSpaceId, managementToken } = this.config;
+    this.productionSpaceOpts = {
+      spaceId: targetSpaceId,
+      managementToken,
+      maxAllowedItems: 10000,
+      skipRoles: true,
+      saveFile: false
+    };
+  }
+  dump () {
+    console.log('Beginning dump of Contentful...');
+    const data = {};
+    return spaceExport(this.stagingSpaceOpts)
+    .then(stagingData => {
+      data.stagingData = stagingData;
+      return spaceExport(this.productionSpaceOpts);
+    })
+    .then(productionData => {
+      data.productionData = productionData;
+      return data;
+    })
+    .catch(err => {
+      console.error('Error dumping Contentful');
+      console.error(err);
+    });
+  }
+}
 
-const productionSpaceOpts = ({ targetSpaceId, managementToken }) => {
-  return {
-    spaceId: targetSpaceId,
-    managementToken,
-    maxAllowedItems: 10000,
-    skipRoles: true,
-    saveFile: false
-  };
-};
-
-const dumpContentful = config => {
-  console.log('Beginning dump of Contentful...');
-  const data = {};
-  return spaceExport(stagingSpaceOpts(config))
-  .then(stagingData => {
-    data.stagingData = stagingData;
-    return spaceExport(productionSpaceOpts(config));
-  })
-  .then(productionData => {
-    data.productionData = productionData;
-    return data;
-  })
-  .catch(err => {
-    console.error('Error dumping Contentful');
-    console.error(err);
-  });
-};
-
-module.exports = dumpContentful;
+module.exports = DumpContentful;
