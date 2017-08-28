@@ -6,6 +6,10 @@ compile:
   override:
     - echo "no compile"
 
+test:
+  override:
+    yarn run test
+
 dependencies:
   override:
     - yarn install
