@@ -66,4 +66,4 @@ This is the space that will be updated based on the content in the origin space.
 ## Contributing
 Please feel free to create issues, make suggestions, and/or open a pull request! Any contributions are appreciated.
 
-**Battle tested at [Common](https://www.common.com)** ![Common Living](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Common Living")
+**Battle tested at [Common](https://www.common.com)** ![Common Living](https://www.common.com/static/images/favicons/favicon-32x32.png "Common Living")
