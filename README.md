@@ -2,9 +2,9 @@
 
 This is a library for doing in-memory diffing of two [Contentful](https://www.contentful.com) spaces.
 
-Rather than using the [contentful-import](https://github.com/contentful/contentful-import) library, which (as far as I understand) clones down the 'original' space and then makes an API request for each asset, entry, content type, etc., in the 'target' space to deduce which pieces of data need creating/updating, this library clones _both_ the original and target spaces and performs the diff in-memory. It then takes the result from the diff and performs an create, update, or delete request for the relevant pieces of content.
+Rather than using the [contentful-import](https://github.com/contentful/contentful-import) library, which (as far as I understand) clones down the 'original' space and then makes an API request for each asset, entry, content type, etc., in the 'target' space to deduce which pieces of data need creating/updating, this library clones _both_ the original and target spaces and performs the diff in-memory. It then takes the result from the diff and performs a create, update, or delete request for the relevant pieces of content.
 
-As it currently stands, this library does not handle API rate limiting well and should thus should probably not be used to clone spaces within Contentful. This library is better suited to sync spaces that have fewer differences.
+As it currently stands, this library does not handle API rate limiting well and thus should probably not be used to clone spaces within Contentful. This library is better suited to sync spaces that have fewer differences.
 
 ## Assumptions and limitations
 ### Limitations
@@ -58,7 +58,7 @@ contentfulSync(config)
 ```
 
 ### `originSpaceId`
-This is the space that's treated as the 'correct' space. `contentful-sync` will attempt to attempt to replicate this space in the target space but will not update any content in this space.
+This is the space that's treated as the source of truth. `contentful-sync` will attempt to replicate this space in the target space but will not update any content in this space.
 
 ### `targetSpaceId`
 This is the space that will be updated based on the content in the origin space.
