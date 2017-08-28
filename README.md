@@ -49,12 +49,12 @@ const config = {
 
 contentfulSync(config)
 .then(() => {
-
+  console.log('Synced successfully!');
 })
 .catch(err => {
-  console.log('Error!')
+  console.log('Error!');
   console.error(err);
-})
+});
 ```
 
 ### `originSpaceId`
