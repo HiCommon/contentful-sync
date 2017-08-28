@@ -1,4 +1,4 @@
-const DiffSpaces = require('../DiffSpaces.js');
+const DiffSpaces = require('../lib/DiffSpaces.js');
 const expect = require('chai').expect;
 const moment = require('moment');
 
