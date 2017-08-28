@@ -1,6 +1,6 @@
-const DumpContentful = require('./DumpContentful.js');
-const DiffSpaces = require('./DiffSpaces.js');
-const upsertContentful = require('./upsertContentful.js');
+const DumpContentful = require('./lib/DumpContentful.js');
+const DiffSpaces = require('./lib/DiffSpaces.js');
+const upsertContentful = require('./lib/upsertContentful.js');
 
 module.exports = (config) => {
   const contentful = new DumpContentful(config);
