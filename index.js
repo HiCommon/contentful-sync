@@ -2,7 +2,7 @@ const DumpContentful = require('./lib/DumpContentful.js');
 const DiffSpaces = require('./lib/DiffSpaces.js');
 const upsertContentful = require('./lib/upsertContentful.js');
 
-const hasRequiredKeys = (config) => {
+const validateKeys = (config) => {
   return ['originSpaceId', 'targetSpaceId', 'managementToken'].reduce((acc, curr) => {
     if (!config[curr]) {
       return acc = false;
