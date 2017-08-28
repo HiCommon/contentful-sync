@@ -1,19 +1,69 @@
 ## Overview
 
-This is a tool for doing in-memory diffing of two [Contentful](https://www.contentful.com) spaces.
+This is a library for doing in-memory diffing of two [Contentful](https://www.contentful.com) spaces.
 
-Rather than using the [contentful-import](https://github.com/contentful/contentful-import) tool, which (as far as I understand) clones down the 'original' space and then makes an API request for each asset, entry, content type, etc., in the 'target' space to deduce which pieces of data need creating/updating, this tool clones _both_ the original and target spaces and performs the diff in-memory. It then takes the result from the diff and performs an upsert request for those records. **It does not yet perform a deletion for the files removed in the original space.**
+Rather than using the [contentful-import](https://github.com/contentful/contentful-import) library, which (as far as I understand) clones down the 'original' space and then makes an API request for each asset, entry, content type, etc., in the 'target' space to deduce which pieces of data need creating/updating, this library clones _both_ the original and target spaces and performs the diff in-memory. It then takes the result from the diff and performs an create, update, or delete request for the relevant pieces of content.
 
-As it currently stands, this tool does not API rate limiting well and should thus not be used to clone spaces within Contentful, rather this should be used for spaces that have smaller differences.
+As it currently stands, this library does not handle API rate limiting well and should thus should probably not be used to clone spaces within Contentful. This library is better suited to sync spaces that have fewer differences.
 
-## How to use
-- Either add a `.env` file with the following keys or pass them in as environment variables via the command line:
-  - ORIGIN_SPACE_ID
-  - TARGET_SPACE_ID
-  - MANAGEMENT_TOKEN
-- `yarn` or `npm install`
-- `yarn run start` or `npm run start`
+## Assumptions and limitations
+### Limitations
+At the moment, the library syncs just Entries, Assets, and Content Types.
+
+### Assumptions
+This library assumes that:
+- You have two spaces that you need to keep in sync.
+- You only update the 'origin' (i.e., staging) space, and do not manually edit anything in your 'target' (i.e., production) space.
+
+This library will sync unidirectionally -- it will sync exclusively from origin -> target. If that is not how you or your content team operates, this probably is not the tool for you.
+
+## Usage
+Add the package to your repository:
+`yarn add contentful-sync` or `npm install contentful-sync --save` 
+
+Require in the library:
+```js
+const contentfulSync = require('contentful-sync');
+```
+
+Create a configuration object that contains the origin space's ID, the target space's ID, and your management token. These are all required.
+```js
+const contentfulSync = require('contentful-sync');
+
+const config = {
+  originSpaceId: 'XXXXXXXX',
+  targetSpaceId: 'YYYYYYYY',
+  managementToken: 'ABCDE12345'
+};
+```
+
+Invoke `contentfulSync` with the configuration object. `contentfulSync` will return a promise. 
+```js
+const contentfulSync = require('contentful-sync');
+
+const config = {
+  originSpaceId: 'XXXXXXXX',
+  targetSpaceId: 'YYYYYYYY',
+  managementToken: 'ABCDE12345'
+};
+
+contentfulSync(config)
+.then(() => {
+
+})
+.catch(err => {
+  console.log('Error!')
+  console.error(err);
+})
+```
+
+### `originSpaceId`
+This is the space that's treated as the 'correct' space. `contentful-sync` will attempt to attempt to replicate this space in the target space but will not update any content in this space.
+
+### `targetSpaceId`
+This is the space that will be updated based on the content in the origin space.
 
 ## Contributing
 Please feel free to create issues, make suggestions, and/or open a pull request! Any contributions are appreciated.
-  
+
+**Battle tested at [Common](https://www.common.com)** ![Common Living](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Common Living")
