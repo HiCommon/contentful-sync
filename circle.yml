@@ -1,0 +1,15 @@
+machine:
+  node:
+    version: 7.0.0
+
+compile:
+  override:
+    - echo "no compile"
+
+test:
+  override:
+    - yarn run test
+
+dependencies:
+  override:
+    - yarn install
