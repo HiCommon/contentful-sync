@@ -75,7 +75,7 @@ class Assets {
     console.log('Removing assets...');  
     return Promise.all(removedAssets.map( (asset) => {
       return space.getAsset(asset.sys.id)
-      .then( (foundAsset) => {
+      .then( (foundAsset) => {      
         return foundAsset.unpublish();
       })
       .then( (unpublishedAsset) => {
