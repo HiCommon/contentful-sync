@@ -48,7 +48,8 @@ const config = {
 };
 
 contentfulSync(config)
-.then(() => {
+.then(setOfDifferences => {
+  console.log(setOfDifferences);
   console.log('Synced successfully!');
 })
 .catch(err => {
