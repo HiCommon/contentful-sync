@@ -1,6 +1,6 @@
 ## Overview
 
-This is a library for doing in-memory diffing of two [Contentful](https://www.contentful.com) spaces.
+[Contentful Sync](https://github.com/HiCommon/contentful-sync) is a library for doing in-memory diffing of two [Contentful](https://www.contentful.com) spaces.
 
 Rather than using the [contentful-import](https://github.com/contentful/contentful-import) library, which (as far as I understand) clones down the 'original' space and then makes an API request for each asset, entry, content type, etc., in the 'target' space to deduce which pieces of data need creating/updating, this library clones _both_ the original and target spaces and performs the diff in-memory. It then takes the result from the diff and performs a create, update, or delete request for the relevant pieces of content.
 

@@ -23,5 +23,19 @@
   "devDependencies": {
     "chai": "^4.1.1",
     "mocha": "^3.5.0"
-  }
+  },
+  "homepage": "https://github.com/HiCommon/contentful-sync",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/HiCommon/contentful-sync.git"
+  },
+  "repository": {
+    "url" : "https://github.com/HiCommon/contentful-sync",
+    "email" : "dev@common.com"
+  },
+  "keywords": [
+    "contentful",
+    "syncing",
+    "diffing"
+  ]
 }
