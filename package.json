@@ -1,6 +1,6 @@
 {
   "name": "contentful-sync",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A library for in-memory diffing and syncing of two Contentful Spaces",
   "main": "index.js",
   "scripts": {
@@ -26,12 +26,8 @@
   },
   "homepage": "https://github.com/HiCommon/contentful-sync",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/HiCommon/contentful-sync.git"
-  },
-  "repository": {
-    "url" : "https://github.com/HiCommon/contentful-sync",
-    "email" : "dev@common.com"
+    "url": "https://github.com/HiCommon/contentful-sync",
+    "email": "dev@common.com"
   },
   "keywords": [
     "contentful",
