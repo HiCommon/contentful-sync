@@ -11,20 +11,18 @@ const validateKeys = (config) => {
   }, true)
 }
 
-module.exports = (config) => {
-  const hasRequiredKeys = validateKeys(config);
-  if (!hasRequiredKeys) {
-    throw new Error('Missing one or more of required keys: originSpaceId, targetSpaceId, managementToken')
+module.exports = async (config) => {
+  try {  
+    const hasRequiredKeys = validateKeys(config);
+    if (!hasRequiredKeys) {
+      throw new Error('Missing one or more of required keys: originSpaceId, targetSpaceId, managementToken')
+    }
+    const contentful = new DumpContentful(config);
+    const contentfulData = await contentful.dump()
+    const differences = new DiffSpaces(contentfulData).differences;
+    return await upsertContentful(config, differences)
+  } catch(e) {
+    process.exitCode = 1;
+    console.error(e);
   }
-  const contentful = new DumpContentful(config);
-  return contentful.dump()
-  .then((contentfulData) => {
-    const spaceDiff = new DiffSpaces(contentfulData);
-    return spaceDiff.differences;
-  })
-  .then((setOfDifferences) => upsertContentful(config, setOfDifferences))
-  .catch(err => {
-    console.error('Error!');
-    console.error(err);
-  });
 }
