@@ -12,17 +12,12 @@ const validateKeys = (config) => {
 }
 
 module.exports = async (config) => {
-  try {  
-    const hasRequiredKeys = validateKeys(config);
-    if (!hasRequiredKeys) {
-      throw new Error('Missing one or more of required keys: originSpaceId, targetSpaceId, managementToken')
-    }
-    const contentful = new DumpContentful(config);
-    const contentfulData = await contentful.dump()
-    const differences = new DiffSpaces(contentfulData).differences;
-    return await upsertContentful(config, differences)
-  } catch(e) {
-    process.exitCode = 1;
-    console.error(e);
+  const hasRequiredKeys = validateKeys(config);
+  if (!hasRequiredKeys) {
+    throw new Error('Missing one or more of required keys: originSpaceId, targetSpaceId, managementToken')
   }
+  const contentful = new DumpContentful(config);
+  const contentfulData = await contentful.dump()
+  const differences = new DiffSpaces(contentfulData).differences;
+  return await upsertContentful(config, differences)
 }
