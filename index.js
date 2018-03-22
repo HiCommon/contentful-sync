@@ -14,10 +14,10 @@ const validateKeys = (config) => {
 module.exports = async (config) => {
   const hasRequiredKeys = validateKeys(config);
   if (!hasRequiredKeys) {
-    throw new Error('Missing one or more of required keys: originSpaceId, targetSpaceId, managementToken')
+    throw new Error('Missing one or more of required keys: originSpaceId, targetSpaceId, managementToken');
   }
   const contentful = new DumpContentful(config);
-  const contentfulData = await contentful.dump()
+  const contentfulData = await contentful.dump();
   const differences = new DiffSpaces(contentfulData).differences;
-  return await upsertContentful(config, differences)
+  return await upsertContentful(config, differences);
 }
