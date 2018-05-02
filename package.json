@@ -1,6 +1,6 @@
 {
   "name": "contentful-sync",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A library for in-memory diffing and syncing of two Contentful Spaces",
   "main": "index.js",
   "scripts": {
