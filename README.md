@@ -14,6 +14,7 @@ At the moment, the library syncs just Entries, Assets, and Content Types.
 This library assumes that:
 - You have two spaces that you need to keep in sync.
 - You only update the 'origin' (i.e., staging) space, and do not manually edit anything in your 'target' (i.e., production) space.
+- Both spaces are set the `en-US` locale (you can manually overcome this by editing `filterAssets` in `lib/Assets.js`).
 
 This library will sync unidirectionally -- it will sync exclusively from origin -> target. If that is not how you or your content team operates, this probably is not the tool for you.
 
