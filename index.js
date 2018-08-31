@@ -18,6 +18,6 @@ module.exports = async (config) => {
   }
   const contentful = new DumpContentful(config);
   const contentfulData = await contentful.dump();
-  const differences = new DiffSpaces(contentfulData).differences;
+  const { differences } = new DiffSpaces(contentfulData);
   return await upsertContentful(config, differences);
 }
