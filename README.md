@@ -20,7 +20,7 @@ This library will sync unidirectionally -- it will sync exclusively from origin 
 
 ## Usage
 Add the package to your repository:
-`yarn add contentful-sync` or `npm install contentful-sync --save` 
+`yarn add contentful-sync` or `npm install contentful-sync --save`
 
 Require in the library:
 ```js
@@ -38,7 +38,7 @@ const config = {
 };
 ```
 
-Invoke `contentfulSync` with the configuration object. `contentfulSync` will return a promise. 
+Invoke `contentfulSync` with the configuration object. `contentfulSync` will return a promise.
 ```js
 const contentfulSync = require('contentful-sync');
 
