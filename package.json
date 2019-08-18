@@ -13,16 +13,16 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "contentful-export": "^4.7.5",
-    "contentful-management": "^3.9.1",
-    "moment": "^2.18.1"
+    "contentful-export": "^7.6.0",
+    "contentful-management": "^5.9.1",
+    "moment": "^2.24.0"
   },
   "engines": {
     "node": ">=8.11.1"
   },
   "devDependencies": {
     "chai": "^4.1.1",
-    "mocha": "^3.5.0"
+    "mocha": "^6.2.0"
   },
   "homepage": "https://github.com/HiCommon/contentful-sync",
   "repository": {
